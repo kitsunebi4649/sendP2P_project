@@ -1,6 +1,8 @@
 from flask import Flask
 from flask import jsonify
 from flask import request
+import time
+import utils
 
 app = Flask(__name__)
 message = None
@@ -10,7 +12,14 @@ message = None
 def receive():
     global message
     if request.method == 'PUT':
+        print('put start', time.time())
         message = request.json
+        print('put end', time.time())
+        # with open('eee.txt', 'w')as e:
+        #     e.write('kfdjskndnfsi')
+        for k, v in message.items():
+            utils.decode_and_write(new_filename=k, data=v)
+        print('decode end', time.time())
         return jsonify({'message': 'success'}), 200
 
     if request.method == 'GET':  # blockchain_serverの27行目参照

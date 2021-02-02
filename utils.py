@@ -1,10 +1,13 @@
 import base64
+import time
 
 
 def read_and_encode(filename):
+    print('encode start', time.time())
     with open(f'send_file/{filename}', 'br') as f1:
         b64_img = base64.b64encode(f1.read())
     send_data = b64_img.decode()
+    print('encode end', time.time())
     return send_data
 
 
