@@ -2,7 +2,7 @@ import requests
 import utils
 
 FILE_NAME = 'SAMPLE.png'
-RECIPIENT_IP = '192.168.0.4:5004'
+RECIPIENT_IP = '192.168.0.6:5004'
 
 
 if __name__ == '__main__':

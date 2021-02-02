@@ -2,7 +2,7 @@ import requests
 from flask import Flask
 import utils
 
-MY_PORT = 5004
+MY_PORT = 5004  # 同じデバイスならreceiver_server.port
 NEW_FILENAME = 'SAMPLE2.png'
 
 app = Flask(__name__)
