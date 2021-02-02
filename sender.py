@@ -9,7 +9,9 @@ if __name__ == '__main__':
     filename_list = os.listdir('send_file')
     print(filename_list)
     if not filename_list == []:
-        data = utils.read_and_encode(filename_list[0])
+        data = {'data':utils.read_and_encode(filename_list[0]),
+                'filename':filename_list[0]
+                }
         requests.put(f'http://{RECIPIENT_IP}/test', json=data)
     else:
         print('no file!!')
