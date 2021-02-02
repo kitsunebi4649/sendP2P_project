@@ -1,8 +1,10 @@
 import requests
-import encoder
+import utils
 
-# data = 123456787654323456
-data = encoder.message
+FILE_NAME = 'SAMPLE.png'
+RECIPIENT_IP = '192.168.0.4:5004'
 
-recipient_ip = '192.168.0.6:5004'
-requests.put(f'http://{recipient_ip}/test', json=data)
+
+if __name__ == '__main__':
+    data = utils.read_and_encode(FILE_NAME)
+    requests.put(f'http://{RECIPIENT_IP}/test', json=data)
