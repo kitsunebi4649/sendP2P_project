@@ -14,6 +14,5 @@ if __name__ == '__main__':
         data = response_json['data']
         new_filename = response_json['filename']
         print(data)
-        utils.decode_and_write(new_filename=new_filename, data=data)
-
-
+        for k, v in zip(new_filename, data):
+            utils.decode_and_write(new_filename=k, data=v)
