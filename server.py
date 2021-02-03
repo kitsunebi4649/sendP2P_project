@@ -5,7 +5,7 @@ import time
 import utils
 import os
 
-DELETE_RECEIVE_DIR = True
+DELETE_ALL_RECEIVE_DIR = True
 
 app = Flask(__name__)
 message = None
@@ -29,10 +29,10 @@ def receive():
 
 
 if __name__ == '__main__':
-    if DELETE_RECEIVE_DIR and len(os.listdir('receive_file')) != 0:
+    if DELETE_ALL_RECEIVE_DIR and len(os.listdir('receive_file')) != 0:
         for i in os.listdir('receive_file'):
             os.remove(f'receive_file/{i}')
-        print('files removed!')
+        print('all files removed!')
     from argparse import ArgumentParser
     parser = ArgumentParser()
     parser.add_argument('-p', '--port', default=5004,

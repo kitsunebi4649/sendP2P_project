@@ -12,7 +12,7 @@ if __name__ == '__main__':
         filename_list.remove('.DS_Store')  # .DS_Storeを削除。必ずif文の前
     print(not filename_list == [])
     if not filename_list == []:
-        print('list start',time.time())
+        print('list start', time.time())
         data_list = [utils.read_and_encode(filename) for filename in filename_list]
         print(filename_list)
         print('dict start', time.time())
