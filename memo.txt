@@ -23,9 +23,9 @@ dir送信に対応する
 
 jsonがput始めるの遅い
 
-base64
 sha256
 zip
+base64
 rsa
 
 受信側には手動にてファイルを入れないと想定(.DS_Store対策)
