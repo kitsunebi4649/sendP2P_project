@@ -2,14 +2,21 @@ import os
 import requests
 import utils
 import time
+import glob
 
 RECIPIENT_IP = '192.168.0.11:5004'
 
 
 if __name__ == '__main__':
-    filename_list = os.listdir('send_file')
-    if '.DS_Store' in filename_list:
-        filename_list.remove('.DS_Store')  # .DS_Storeを削除。必ずif文の前
+    print(os.listdir('send_file'))
+    full_filename_list = glob.glob('send_file/**', recursive=True)
+    print(full_filename_list)
+    filename_list = [name[len('send_file/'):] for name in full_filename_list]
+    print(filename_list)
+    for i, filename in enumerate(filename_list):  # このif文改良の余地あり
+        if filename == '':
+            del filename_list[i]  # .DS_Storeを削除。必ずif文の前 #隠しファイル無効
+    print(filename_list)
     print(not filename_list == [])
     if not filename_list == []:
         print('list start', time.time())

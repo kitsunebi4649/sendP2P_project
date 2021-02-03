@@ -19,6 +19,7 @@ GUI化
 server上でファイル操作不能！
 zip形式
 .DS_Store対策
+dir送信に対応する
 
 jsonがput始めるの遅い
 
