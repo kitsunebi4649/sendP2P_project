@@ -3,6 +3,9 @@ from flask import jsonify
 from flask import request
 import time
 import utils
+import os
+
+DELETE_RECEIVE_DIR = True
 
 app = Flask(__name__)
 message = None
@@ -15,8 +18,6 @@ def receive():
         print('put start', time.time())
         message = request.json
         print('put end', time.time())
-        # with open('eee.txt', 'w')as e:
-        #     e.write('kfdjskndnfsi')
         for k, v in message.items():
             utils.decode_and_write(new_filename=k, data=v)
         print('decode end', time.time())
@@ -28,6 +29,10 @@ def receive():
 
 
 if __name__ == '__main__':
+    if DELETE_RECEIVE_DIR and len(os.listdir('receive_file')) != 0:
+        for i in os.listdir('receive_file'):
+            os.remove(f'receive_file/{i}')
+        print('files removed!')
     from argparse import ArgumentParser
     parser = ArgumentParser()
     parser.add_argument('-p', '--port', default=5004,

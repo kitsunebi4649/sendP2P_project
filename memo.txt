@@ -22,6 +22,9 @@ zip形式
 
 jsonがput始めるの遅い
 
+base64
+sha256
+zip
+rsa
 
-
-　　
+受信側には手動にてファイルを入れないと想定(.DS_Store対策)
