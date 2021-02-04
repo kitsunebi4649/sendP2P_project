@@ -1,7 +1,6 @@
 from flask import Flask
 from flask import jsonify
 from flask import request
-import time
 import utils
 import os
 
@@ -15,12 +14,13 @@ message = None
 def receive():
     global message
     if request.method == 'PUT':
-        print('put start', time.time())
         message = request.json
-        print('put end', time.time())
-        for k, v in message.items():
-            utils.decode_and_write(new_filename=k, data=v)
-        print('decode end', time.time())
+        if message['is_zip']:
+            utils.decode_and_write(new_filename='send.zip', data=message['data'], is_zip=['is_zip'])
+        else:
+            for k, v, z in zip(message['filename'], message['data'], message['is_zip']):
+                utils.decode_and_write(new_filename=k, data=v, is_zip=z)
+        utils.to_unzip(message['is_zip'])
         return jsonify({'message': 'success'}), 200
 
     if request.method == 'GET':  # blockchain_serverの27行目参照
