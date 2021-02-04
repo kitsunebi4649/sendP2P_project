@@ -4,10 +4,10 @@ import zipfile
 import glob
 
 
-def read_and_encode(filename=None, is_zip=None):
+def read_and_encode(filename, is_zip):
     print('encode start', time.time())
     if is_zip:
-        with open(f'send_file_zip/send.zip', 'br') as f1:
+        with open(f'send_file_zip/{filename}.zip', 'br') as f1:
             b64_img = base64.b64encode(f1.read())
     else:
         with open(f'send_file/{filename}', 'br') as f1:
@@ -19,7 +19,7 @@ def read_and_encode(filename=None, is_zip=None):
 
 def decode_and_write(new_filename, data, is_zip):
     if is_zip:
-        with open(f'receive_file_zip/send.zip', 'bw') as f4:
+        with open(f'receive_file_zip/{new_filename}.zip', 'bw') as f4:
             f4.write(base64.b64decode(data))                           # TODO
     else:
         with open(f'receive_file/{new_filename}', 'bw') as f4:
@@ -41,22 +41,25 @@ def to_zip(is_zip):
     #     print(r)
     #     os.remove(r)
     if is_zip:
-        with zipfile.ZipFile('send_file_zip/send.zip', 'w') as z:  # 新規zipファイル名
-            for f in get_filename_list('send_file/'):  # zip対象ファイル名 ディレクトリーは無効
-                print(get_filename_list('send_file/'))
-                z.write('send_file/' + f)
+        for filename in get_filename_list('send_file/'):
+            with zipfile.ZipFile(f'send_file_zip/{filename}.zip', 'w') as z:  # 新規zipファイル名
+                # for f in get_filename_list('send_file/'):  # zip対象ファイル名 ディレクトリーは無効
+                # print(get_filename_list('send_file/'))
+                z.write('send_file/' + filename)
 
 
 def make_send_data(is_zip):
-    if is_zip:
-        return {'filename_list': get_filename_list('send_file/'), 'data': read_and_encode(is_zip=True), 'is_zip': True}
-    else:
-        return {'filename_list': get_filename_list('send_file/'), 'data': [read_and_encode(filename=filename,
-                                                                                           is_zip=False)
-                for filename in get_filename_list('send_file/')], 'is_zip': False}
+    return {'filename_list': get_filename_list('send_file/'), 'data': [read_and_encode(filename=filename,
+            is_zip=is_zip)for filename in get_filename_list('send_file/')], 'is_zip': is_zip}
 
 
-def to_unzip(is_zip):
+def to_unzip(filename_list, is_zip):
     if is_zip:
-        with zipfile.ZipFile('receive_file_zip/send.zip', 'r') as f:
-            f.extractall('receive_file_zip2')  # ファイル全体をrename
+        for filename in filename_list:
+            print(f'receive_file_zip/{filename}')
+            with zipfile.ZipFile(f'receive_file_zip/{filename}.zip', 'r')as f:
+                f.extractall('receive_file')
+
+
+        # with zipfile.ZipFile('receive_file_zip/send.zip', 'r') as f:
+        #     f.extractall('.')  # ファイル全体をrename

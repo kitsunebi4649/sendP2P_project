@@ -4,7 +4,7 @@ from flask import request
 import utils
 import os
 
-DELETE_ALL_RECEIVE_DIR = True
+DELETE_ALL_RECEIVE_DIR = False  # 再起動するバグ
 
 app = Flask(__name__)
 message = None
@@ -15,12 +15,13 @@ def receive():
     global message
     if request.method == 'PUT':
         message = request.json
-        if message['is_zip']:
-            utils.decode_and_write(new_filename='send.zip', data=message['data'], is_zip=['is_zip'])
-        else:
-            for k, v, z in zip(message['filename'], message['data'], message['is_zip']):
-                utils.decode_and_write(new_filename=k, data=v, is_zip=z)
-        utils.to_unzip(message['is_zip'])
+        # if message['is_zip']:
+        #     utils.decode_and_write(new_filename='send.zip', data=message['data'], is_zip=['is_zip'])
+        # else:
+        print(message['filename_list'])
+        for k, v in zip(message['filename_list'], message['data']):
+            utils.decode_and_write(new_filename=k, data=v, is_zip=message['is_zip'])
+        utils.to_unzip(filename_list=message['filename_list'], is_zip=message['is_zip'])
         return jsonify({'message': 'success'}), 200
 
     if request.method == 'GET':  # blockchain_serverの27行目参照
