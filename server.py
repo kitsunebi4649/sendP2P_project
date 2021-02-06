@@ -13,6 +13,7 @@ message = None
 @app.route('/test', methods=['PUT', 'GET'])
 def receive():
     global message
+    utils.dir_reset('receive_file_zip')
     if request.method == 'PUT':
         message = request.json
         # if message['is_zip']:

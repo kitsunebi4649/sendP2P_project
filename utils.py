@@ -2,6 +2,8 @@ import base64
 import time
 import zipfile
 import glob
+import os
+import shutil
 
 
 def read_and_encode(filename, is_zip):
@@ -19,9 +21,11 @@ def read_and_encode(filename, is_zip):
 
 def decode_and_write(new_filename, data, is_zip):
     if is_zip:
+        dir_reset('receive_file_zip')
         with open(f'receive_file_zip/{new_filename}.zip', 'bw') as f4:
             f4.write(base64.b64decode(data))                           # TODO
     else:
+        dir_reset('receive_file')
         with open(f'receive_file/{new_filename}', 'bw') as f4:
             f4.write(base64.b64decode(data))
 
@@ -63,3 +67,8 @@ def to_unzip(filename_list, is_zip):
 
         # with zipfile.ZipFile('receive_file_zip/send.zip', 'r') as f:
         #     f.extractall('.')  # ファイル全体をrename
+
+def dir_reset(dir_name):
+    if os.path.exists(dir_name):
+        shutil.rmtree(dir_name)
+    os.mkdir(dir_name)
