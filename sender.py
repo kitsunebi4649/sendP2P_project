@@ -1,8 +1,8 @@
 import requests
 import utils
 
-RECIPIENT_IP = '192.168.0.15:5004'
-ZIP = True
+RECIPIENT_IP = '192.168.0.12:5004'
+ZIP = False
 
 
 if __name__ == '__main__':

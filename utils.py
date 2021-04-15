@@ -63,10 +63,11 @@ def to_unzip(filename_list, is_zip):
             print(f'receive_file_zip/{filename}')
             with zipfile.ZipFile(f'receive_file_zip/{filename}.zip', 'r')as f:
                 f.extractall('receive_file')
-
-
+                shutil.move(f'receive_file/send_file/{filename}', f'receive_file')
+        os.rmdir('receive_file/send_file')
         # with zipfile.ZipFile('receive_file_zip/send.zip', 'r') as f:
         #     f.extractall('.')  # ファイル全体をrename
+
 
 def dir_reset(dir_name):
     if os.path.exists(dir_name):
