@@ -10,10 +10,9 @@ from Crypto.Cipher import AES
 class Send_text(object):
 
     def __init__(self, data, public_key):
-        self.data = data
         self.message_key = get_random_bytes(32)
         self.rsa_ciphertext = self.rsa_encrypt(public_key)
-        self.aes_ciphertext, self.tag, self.nonce = self.aes_encrypt()
+        self.aes_ciphertext, self.tag, self.nonce = self.aes_encrypt(data)
 
     def rsa_encrypt(self, public_key):
         # メッセージを暗号化
@@ -21,34 +20,30 @@ class Send_text(object):
         rsa_ciphertext = public_cipher.encrypt(self.message_key)
         return rsa_ciphertext
 
-    def aes_encrypt(self):
+    def aes_encrypt(self, data):
         # 暗号化処理
         cipher = AES.new(self.message_key, AES.MODE_EAX)
-        aes_ciphertext, tag = cipher.encrypt_and_digest(self.data)
+        aes_ciphertext, tag = cipher.encrypt_and_digest(data)
         return aes_ciphertext, tag, cipher.nonce
 
 
 class Received_text(object):
 
     def __init__(self, rsa_ciphertext, aes_ciphertext, tag, nonce, private_key):
-        self.rsa_ciphertext = rsa_ciphertext
-        self.aes_ciphertext = aes_ciphertext
-        self.tag = tag
-        self.nonce = nonce
         self.private_key = private_key
-        self.message_key = self.rsa_decrypt()
-        self.data = self.aes_decrypt()
+        self.message_key = self.rsa_decrypt(rsa_ciphertext)
+        self.data = self.aes_decrypt(aes_ciphertext, tag, nonce)
 
-    def rsa_decrypt(self):
+    def rsa_decrypt(self, rsa_ciphertext):
         # メッセージを復号
         private_cipher = PKCS1_OAEP.new(self.private_key)
-        message_key = private_cipher.decrypt(self.rsa_ciphertext)
+        message_key = private_cipher.decrypt(rsa_ciphertext)
         return message_key
 
-    def aes_decrypt(self):
+    def aes_decrypt(self, aes_ciphertext, tag, nonce):
         # 復号処理
-        cipher_dec = AES.new(self.message_key, AES.MODE_EAX, self.nonce)
-        dec_data = cipher_dec.decrypt_and_verify(self.aes_ciphertext, self.tag)
+        cipher_dec = AES.new(self.message_key, AES.MODE_EAX, nonce)
+        dec_data = cipher_dec.decrypt_and_verify(aes_ciphertext, tag)
         return dec_data
 
     def save(self, filename):
